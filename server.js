@@ -83,7 +83,8 @@ app.use(cors({
   origin: [
     'http://localhost:5173',
     'http://localhost:3000',
-    'https://ims.trk-holding.com'
+    'https://ims.trk-holding.com',
+    'https://trk-ims-frontend.vercel.app',
   ],
   credentials: true
 }));
