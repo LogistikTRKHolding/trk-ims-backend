@@ -583,16 +583,6 @@ app.post('/api/data/:table', authenticateToken, async (req, res) => {
 
     console.log(`📝 [${req.user.email}] Creating record in: ${tableName}`);
 
-    const { role } = req.user;
-    
-    // Check permissions
-    if (tableName === 'barang' || tableName === 'vendor' || tableName === 'pembelian') {
-      if (role === 'Staff') {
-        console.log(`❌ Permission denied for Staff user`);
-        return res.status(403).json({ error: 'Insufficient permissions' });
-      }
-    }
-
     // Prepare record data
     const record = { ...req.body };
 
@@ -678,15 +668,6 @@ app.put('/api/data/:table/:id', authenticateToken, async (req, res) => {
 
     console.log(`✏️ [${req.user.email}] Updating record in: ${tableName}, ID: ${req.params.id}`);
 
-    const { role } = req.user;
-
-    // Check permissions
-    if (tableName === 'barang' || tableName === 'vendor' || tableName === 'pembelian') {
-      if (role === 'Staff') {
-        return res.status(403).json({ error: 'Insufficient permissions' });
-      }
-    }
-
     // Prepare updates
     const updates = { ...req.body };
     
@@ -746,7 +727,7 @@ app.delete('/api/data/:table/:id', authenticateToken, async (req, res) => {
       return res.status(403).json({ error: 'Admin only' });
     }
 
-    if ((tableName === 'vendor' || tableName === 'pembelian' || tableName === 'mutasi_gudang') && role === 'Staff') {
+    if ((tableName === 'kategori' || tableName === 'vendor') && role === 'Staff') {
       return res.status(403).json({ error: 'Insufficient permissions' });
     }
 
