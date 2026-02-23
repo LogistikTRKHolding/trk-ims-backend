@@ -161,6 +161,49 @@ async function test() {
   console.log();
 
   // ============================================
+  // TEST 4A: Get Users
+  // ============================================
+  console.log('4️⃣a  Testing Get Users...');
+  try {
+    const response = await fetch(`${BASE_URL}/users`, {
+      headers: { 
+        'Authorization': `Bearer ${token}` 
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Get users failed');
+    }
+
+    const data = await response.json();
+    
+    if (Array.isArray(data)) {
+      console.log('   ✅ Retrieved users successfully');
+      console.log('   📊 Total items:', data.length);
+      
+      if (data.length > 0) {
+        console.log('   📦 Sample item:', {
+          kode: data[0].user,
+          nama: data[0].fullName,
+          role: data[0].role
+        });
+      } else {
+        console.log('   ⚠️  No users in database');
+      }
+      testsPassed++;
+    } else {
+      console.log('   ❌ Invalid response format');
+      console.log('   📊 Response:', data);
+      testsFailed++;
+    }
+  } catch (error) {
+    console.log('   ❌ Error:', error.message);
+    testsFailed++;
+  }
+  console.log();
+
+  // ============================================
   // TEST 5: Get Vendor
   // ============================================
   console.log('5️⃣  Testing Get Vendor...');
