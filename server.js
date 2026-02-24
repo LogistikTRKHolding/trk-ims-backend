@@ -586,6 +586,14 @@ app.post('/api/data/:table', authenticateToken, async (req, res) => {
     // Prepare record data
     const record = { ...req.body };
 
+    // Sanitize: ubah string kosong pada field tanggal menjadi null
+    const dateFields = ['tanggal', 'tanggal_po', 'tanggal_terima', 'tanggal_selesai'];
+    dateFields.forEach(field => {
+      if (field in record && record[field] === '') {
+        record[field] = null;
+      }
+    });
+
     // Add created_by using UUID from JWT token
     const tablesWithCreatedBy = ['barang', 'vendor', 'pembelian', 'mutasi_gudang', 'kategori', 'armada'];
     if (tablesWithCreatedBy.includes(tableName)) {
@@ -670,6 +678,15 @@ app.put('/api/data/:table/:id', authenticateToken, async (req, res) => {
 
     // Prepare updates
     const updates = { ...req.body };
+
+    // Sanitize: ubah string kosong pada field tanggal menjadi null
+    // agar tidak menyebabkan error "invalid input syntax for type date"
+    const dateFields = ['tanggal', 'tanggal_po', 'tanggal_terima', 'tanggal_selesai'];
+    dateFields.forEach(field => {
+      if (field in updates && updates[field] === '') {
+        updates[field] = null;
+      }
+    });
     
     // Add updated_by using UUID from JWT token
     const tablesWithUpdatedBy = ['barang', 'vendor', 'pembelian', 'mutasi_gudang', 'kategori', 'armada'];
@@ -687,6 +704,40 @@ app.put('/api/data/:table/:id', authenticateToken, async (req, res) => {
 
     if (error) {
       console.error(`❌ Error updating record:`, error);
+
+      // Handle specific database errors (sama seperti POST handler)
+      if (error.code === '23505') {
+        return res.status(400).json({
+          error: 'Duplicate entry',
+          details: error.message,
+          hint: 'A record with this unique key already exists'
+        });
+      }
+
+      if (error.code === '23503') {
+        return res.status(400).json({
+          error: 'Foreign key constraint violation',
+          details: error.message,
+          hint: 'Make sure referenced records exist'
+        });
+      }
+
+      if (error.code === '23502') {
+        return res.status(400).json({
+          error: 'Missing required field',
+          details: error.message,
+          hint: 'Check that all required fields are provided'
+        });
+      }
+
+      if (error.code === '22007' || error.code === '22008') {
+        return res.status(400).json({
+          error: 'Invalid date/time format',
+          details: error.message,
+          hint: 'Pastikan field tanggal berisi format YYYY-MM-DD atau null, bukan string kosong'
+        });
+      }
+
       throw error;
     }
 
