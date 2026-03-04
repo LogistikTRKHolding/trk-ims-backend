@@ -142,6 +142,7 @@ async function test() {
       if (data.length > 0) {
         console.log('   📦 Sample item:', {
           kode: data[0].kode_barang,
+          pn: data[0].part_number,
           nama: data[0].nama_barang,
           kategori: data[0].kategori
         });
@@ -190,6 +191,50 @@ async function test() {
         });
       } else {
         console.log('   ⚠️  No users in database');
+      }
+      testsPassed++;
+    } else {
+      console.log('   ❌ Invalid response format');
+      console.log('   📊 Response:', data);
+      testsFailed++;
+    }
+  } catch (error) {
+    console.log('   ❌ Error:', error.message);
+    testsFailed++;
+  }
+  console.log();
+
+  // ============================================
+  // TEST 4B: Get Sub Kategory
+  // ============================================
+  console.log('4️⃣B  Testing Get Sub Kategori...');
+  try {
+    const response = await fetch(`${BASE_URL}/views/v_sub_kategori`, {
+      headers: { 
+        'Authorization': `Bearer ${token}` 
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Get sub-kategori failed');
+    }
+
+    const data = await response.json();
+    
+    if (Array.isArray(data)) {
+      console.log('   ✅ Retrieved sub-kategori successfully');
+      console.log('   📊 Total items:', data.length);
+      
+      if (data.length > 0) {
+        console.log('   📦 Sample item:', {
+          kode_sub_kategori: data[0].kode_sub_kategori,
+          nama_sub_kategori: data[0].nama_sub_kategori,
+          kode_kategori: data[0].kode_kategori,
+          deskripsi:data[0].deskripsi,
+        });
+      } else {
+        console.log('   ⚠️  No v_sub_kategori in database');
       }
       testsPassed++;
     } else {

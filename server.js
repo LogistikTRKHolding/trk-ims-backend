@@ -345,15 +345,15 @@ app.delete('/api/users/:userId', authenticateToken, requireRole('Admin'), async 
 // TABLE & VIEW MAPPINGS
 // ============================================
 
-// Map for backward compatibility (existing endpoints)
 const tableMap = {
   barang: 'barang',
   vendor: 'vendor',
   pembelian: 'pembelian',
   mutasi: 'mutasi_gudang',
-  stok: 'v_stok_summary', // ← Now points to VIEW
+  stok: 'v_stok_summary',
   kategori: 'kategori',
-  armada: 'armada', // ← Added direct mapping
+  sub_kategori: 'sub_kategori',
+  armada: 'armada',
 };
 
 // Map of VIEWs (for new /api/views endpoints)
@@ -364,6 +364,7 @@ const viewMap = {
   v_mutasi_gudang_complete: 'v_mutasi_gudang_complete',
   v_pembelian_complete: 'v_pembelian_complete',
   v_stok_summary: 'v_stok_summary',
+  v_sub_kategori: 'v_sub_kategori',
 };
 
 // Map of BASE TABLEs (for write operations)
@@ -374,6 +375,7 @@ const baseTableMap = {
   vendor: 'vendor',
   pembelian: 'pembelian',
   mutasi_gudang: 'mutasi_gudang',
+  sub_kategori: 'sub_kategori',
 };
 
 // ============================================
@@ -430,8 +432,10 @@ app.get('/api/views/:viewName', authenticateToken, async (req, res) => {
       query = query.order('tanggal', { ascending: false });
     } else if (actualViewName.includes('pembelian')) {
       query = query.order('tanggal_po', { ascending: false });
+    } else if (actualViewName === 'v_sub_kategori') {
+      query = query.order('kode_sub_kategori', { ascending: true });
     }
-
+    
     const { data, error } = await query;
 
     if (error) {
@@ -595,7 +599,7 @@ app.post('/api/data/:table', authenticateToken, async (req, res) => {
     });
 
     // Add created_by using UUID from JWT token
-    const tablesWithCreatedBy = ['barang', 'vendor', 'pembelian', 'mutasi_gudang', 'kategori', 'armada'];
+    const tablesWithCreatedBy = ['barang', 'vendor', 'pembelian', 'mutasi_gudang', 'kategori', 'armada', 'sub_kategori'];
     if (tablesWithCreatedBy.includes(tableName)) {
       record.created_by = req.user.id; // ← Use UUID from JWT
     }
@@ -689,7 +693,7 @@ app.put('/api/data/:table/:id', authenticateToken, async (req, res) => {
     });
     
     // Add updated_by using UUID from JWT token
-    const tablesWithUpdatedBy = ['barang', 'vendor', 'pembelian', 'mutasi_gudang', 'kategori', 'armada'];
+    const tablesWithUpdatedBy = ['barang', 'vendor', 'pembelian', 'mutasi_gudang', 'kategori', 'sub_kategori', 'armada'];
     if (tablesWithUpdatedBy.includes(tableName)) {
       updates.updated_by = req.user.id; // ← Use UUID from JWT
       updates.updated_at = new Date().toISOString();
@@ -778,7 +782,7 @@ app.delete('/api/data/:table/:id', authenticateToken, async (req, res) => {
       return res.status(403).json({ error: 'Admin only' });
     }
 
-    if ((tableName === 'kategori' || tableName === 'vendor') && role === 'Staff') {
+    if ((tableName === 'kategori' || tableName === 'sub_kategori' || tableName === 'vendor') && role === 'Staff') {
       return res.status(403).json({ error: 'Insufficient permissions' });
     }
 
@@ -1037,6 +1041,7 @@ app.listen(PORT, () => {
   console.log('   - v_mutasi_gudang_complete');
   console.log('   - v_pembelian_complete');
   console.log('   - v_stok_summary');
+  console.log('   - v_sub_kategori');
   console.log('\n🚀 Ready to accept requests!\n');
 });
 
