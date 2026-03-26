@@ -347,13 +347,14 @@ app.delete('/api/users/:userId', authenticateToken, requireRole('Admin'), async 
 
 const tableMap = {
   barang: 'barang',
-  vendor: 'vendor',
-  pembelian: 'pembelian',
-  mutasi: 'mutasi_gudang',
-  stok: 'v_stok_summary',
   kategori: 'kategori',
   sub_kategori: 'sub_kategori',
   armada: 'armada',
+  vendor: 'vendor',
+  gudang: 'gudang',
+  pembelian: 'pembelian',
+  mutasi: 'mutasi_gudang',
+  stok: 'v_stok_summary',
 };
 
 // Map of VIEWs (for new /api/views endpoints)
@@ -371,11 +372,12 @@ const viewMap = {
 const baseTableMap = {
   barang: 'barang',
   kategori: 'kategori',
+  sub_kategori: 'sub_kategori',
   armada: 'armada',
   vendor: 'vendor',
+  gudang: 'gudang',
   pembelian: 'pembelian',
   mutasi_gudang: 'mutasi_gudang',
-  sub_kategori: 'sub_kategori',
 };
 
 // ============================================
