@@ -23,7 +23,7 @@ async function test() {
   // ============================================
   // TEST 1: Health Check
   // ============================================
-  console.log('1️⃣  Testing Health Check...');
+  console.log('1. Testing Health Check...');
   try {
     const response = await fetch(`${BASE_URL}/health`);
     const data = await response.json();
@@ -46,7 +46,7 @@ async function test() {
   // ============================================
   // TEST 2: Login
   // ============================================
-  console.log('2️⃣  Testing Login...');
+  console.log('2. Testing Login...');
   try {
     const response = await fetch(`${BASE_URL}/auth/login`, {
       method: 'POST',
@@ -88,7 +88,7 @@ async function test() {
   // ============================================
   // TEST 3: Verify Token
   // ============================================
-  console.log('3️⃣  Testing Token Verification...');
+  console.log('3. Testing Token Verification...');
   try {
     const response = await fetch(`${BASE_URL}/auth/verify`, {
       headers: { 
@@ -120,7 +120,7 @@ async function test() {
   // ============================================
   // TEST 4: Get Barang
   // ============================================
-  console.log('4️⃣  Testing Get Barang...');
+  console.log('4. Testing Get Barang...');
   try {
     const response = await fetch(`${BASE_URL}/data/barang`, {
       headers: { 
@@ -162,9 +162,9 @@ async function test() {
   console.log();
 
   // ============================================
-  // TEST 4A: Get Users
+  // TEST 5: Get Users
   // ============================================
-  console.log('4️⃣a  Testing Get Users...');
+  console.log('5. Testing Get Users...');
   try {
     const response = await fetch(`${BASE_URL}/users`, {
       headers: { 
@@ -205,9 +205,9 @@ async function test() {
   console.log();
 
   // ============================================
-  // TEST 4B: Get Sub Kategory
+  // TEST 6: Get Sub Kategory
   // ============================================
-  console.log('4️⃣B  Testing Get Sub Kategori...');
+  console.log('6. Testing Get Sub Kategori...');
   try {
     const response = await fetch(`${BASE_URL}/views/v_sub_kategori`, {
       headers: { 
@@ -249,9 +249,9 @@ async function test() {
   console.log();
 
   // ============================================
-  // TEST 5: Get Vendor
+  // TEST 7: Get Vendor
   // ============================================
-  console.log('5️⃣  Testing Get Vendor...');
+  console.log('7. Testing Get Vendor...');
   try {
     const response = await fetch(`${BASE_URL}/data/vendor`, {
       headers: { 
@@ -281,9 +281,9 @@ async function test() {
   console.log();
 
   // ============================================
-  // TEST 6: Get Stok Summary
+  // TEST 8: Get Stok Summary
   // ============================================
-  console.log('6️⃣  Testing Get Stok Summary...');
+  console.log('8. Testing Get Stok Summary...');
   try {
     const response = await fetch(`${BASE_URL}/data/stok`, {
       headers: { 
@@ -321,9 +321,9 @@ async function test() {
   console.log();
 
   // ============================================
-  // TEST 7: Get Dashboard Metrics
+  // TEST 9: Get Dashboard Metrics
   // ============================================
-  console.log('7️⃣  Testing Dashboard Metrics...');
+  console.log('9. Testing Dashboard Metrics...');
   try {
     const response = await fetch(`${BASE_URL}/dashboard/metrics`, {
       headers: { 
@@ -360,9 +360,9 @@ async function test() {
   console.log();
 
   // ============================================
-  // TEST 8: Get Users (Admin only)
+  // TEST 10: Get Users (Admin only)
   // ============================================
-  console.log('8️⃣  Testing Get Users (Admin)...');
+  console.log('10. Testing Get Users (Admin)...');
   try {
     const response = await fetch(`${BASE_URL}/users`, {
       headers: { 
@@ -396,15 +396,15 @@ async function test() {
   console.log();
 
   // ============================================
-  // TEST 9: Create Mutasi (All roles)
+  // TEST 11: Create Mutasi (All roles)
   // ============================================
-  console.log('9️⃣  Testing Create Mutasi Gudang...');
+  console.log('11. Testing Create Mutasi Gudang...');
   try {
     const testMutasi = {
       //no_transaksi: 'TEST-' + Date.now(),
       tanggal: new Date().toISOString().split('T')[0],
       jenis_transaksi: 'Masuk',
-      kode_barang: 'ST0003401544', // Adjust based on your data
+      kode_barang: 'PL-WSH-SELANG-KOMPRESSOR', // Adjust based on your data
       nama_barang: 'Test Item',
       qty: 10,
       satuan: 'PCS',
