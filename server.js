@@ -79,7 +79,7 @@ try {
 // MIDDLEWARE
 // ============================================
 
-app.options('*', cors());
+app.options('(.*)', cors());
 app.use(cors({
   origin: [
     'http://localhost:5173',
