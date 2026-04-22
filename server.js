@@ -390,9 +390,9 @@ const tableMap = {
   armada: "armada",
   vendor: "vendor",
   gudang: "gudang",
+  rak: "rak",
   pembelian: "pembelian",
   mutasi: "mutasi_gudang",
-  stok: "v_stok_summary",
 };
 
 // Map of VIEWs (for new /api/views endpoints)
@@ -414,6 +414,7 @@ const baseTableMap = {
   armada: "armada",
   vendor: "vendor",
   gudang: "gudang",
+  rak: "rak",
   pembelian: "pembelian",
   mutasi_gudang: "mutasi_gudang",
 };
