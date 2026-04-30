@@ -573,6 +573,10 @@ app.get("/api/data/:table", authenticateToken, async (req, res) => {
       const tablesWithCreatedAt = [
         "barang",
         "vendor",
+        "kategori",
+        "sub-kategori",
+        "gudang",
+        "rak",
         "pembelian",
         "mutasi_gudang",
         "users",
@@ -658,8 +662,8 @@ app.post("/api/data/:table", authenticateToken, async (req, res) => {
       "pembelian",
       "mutasi_gudang",
       "kategori",
-      "armada",
       "sub_kategori",
+      "armada",
     ];
     if (tablesWithCreatedBy.includes(tableName)) {
       record.created_by = req.user.id; // ← Use UUID from JWT
