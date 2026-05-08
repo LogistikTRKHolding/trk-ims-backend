@@ -464,6 +464,8 @@ app.get("/api/views/:viewName", authenticateToken, async (req, res) => {
     // Handle limit
     if (filters.limit) {
       query = query.limit(parseInt(filters.limit));
+    } else {
+      query = query.limit(5000); // ← default tinggi agar semua data terfetch
     }
 
     // Apply ordering
@@ -593,8 +595,14 @@ app.get("/api/data/:table", authenticateToken, async (req, res) => {
       }
     }
 
-    const { data, error } = await query;
+    if (!isView) {
+      // base tables tidak perlu limit besar, data jarang > 1000
+    } else {
+      query = query.limit(5000);
+    }
 
+    const { data, error } = await query;
+    
     if (error) {
       console.error(`❌ Error fetching ${tableName}:`, error);
 
