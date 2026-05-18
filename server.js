@@ -379,6 +379,60 @@ app.delete(
   },
 );
 
+//Change Password
+app.post("/api/users/:userId/change-password", authenticateToken, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { current_password, new_password } = req.body;
+    const isOwnAccount = userId === req.user.userId;
+    const isAdmin = req.user.role === 'Admin';
+
+    if (!new_password || new_password.length < 8) {
+      return res.status(400).json({ error: "Password baru minimal 8 karakter" });
+    }
+
+    // Ambil data user target
+    const { data: user, error: fetchError } = await supabase
+      .from("users")
+      .select("*")
+      .eq("user_id", userId)
+      .single();
+
+    if (fetchError || !user) {
+      return res.status(404).json({ error: "User tidak ditemukan" });
+    }
+
+    // Jika ganti password sendiri → wajib verifikasi password lama
+    // Jika Admin reset password user lain → skip verifikasi
+    if (isOwnAccount) {
+      if (!current_password) {
+        return res.status(400).json({ error: "Password saat ini harus diisi" });
+      }
+      const isValid = await bcrypt.compare(current_password, user.password_hash);
+      if (!isValid) {
+        return res.status(401).json({ error: "Password saat ini tidak sesuai" });
+      }
+    } else if (!isAdmin) {
+      // Non-admin tidak boleh ganti password orang lain
+      return res.status(403).json({ error: "Tidak memiliki izin" });
+    }
+
+    const password_hash = await bcrypt.hash(new_password, 10);
+
+    const { error: updateError } = await supabase
+      .from("users")
+      .update({ password_hash })
+      .eq("user_id", userId);
+
+    if (updateError) throw updateError;
+
+    res.json({ message: "Password berhasil diubah" });
+  } catch (error) {
+    console.error("Change password error:", error);
+    res.status(500).json({ error: "Internal server error", details: error.message });
+  }
+});
+
 // ============================================
 // TABLE & VIEW MAPPINGS
 // ============================================
