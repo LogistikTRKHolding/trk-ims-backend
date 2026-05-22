@@ -474,7 +474,7 @@ const baseTableMap = {
 };
 
 // ============================================
-// NEW: VIEW ROUTES (READ ONLY)
+// VIEW ROUTES (READ ONLY)
 // ============================================
 
 // Get all records from a VIEW
@@ -606,7 +606,7 @@ app.get("/api/views/:viewName/:id", authenticateToken, async (req, res) => {
 });
 
 // ============================================
-// EXISTING DATA ROUTES (BACKWARD COMPATIBLE)
+// DATA ROUTES
 // ============================================
 
 // Get data - UPDATED to support VIEWs
