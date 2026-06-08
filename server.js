@@ -447,6 +447,7 @@ const tableMap = {
   rak: "rak",
   pembelian: "pembelian",
   mutasi: "mutasi_gudang",
+  permintaan_barang: "permintaan_barang",
 };
 
 // Map of VIEWs (for new /api/views endpoints)
@@ -458,6 +459,7 @@ const viewMap = {
   v_pembelian_complete: "v_pembelian_complete",
   v_stok_summary: "v_stok_summary",
   v_sub_kategori: "v_sub_kategori",
+  v_permintaan_barang: "v_permintaan_barang",
 };
 
 // Map of BASE TABLEs (for write operations)
@@ -471,6 +473,7 @@ const baseTableMap = {
   rak: "rak",
   pembelian: "pembelian",
   mutasi_gudang: "mutasi_gudang",
+  permintaan_barang: "permintaan_barang",
 };
 
 // ============================================
